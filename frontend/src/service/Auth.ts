@@ -8,6 +8,7 @@ const register = async (data: RegisterFormData): Promise<LoginResponse> => {
   return response.data;
 };
 
+
 const login = async (data: LoginFormData): Promise<LoginResponse> => {
     const response = await apiAuth.post(`${baseURL}/login.php`, data)
     return response.data

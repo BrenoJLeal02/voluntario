@@ -1,5 +1,9 @@
 <?php
 require '../conexao.php';
+require '../vendor/autoload.php';
+
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -11,6 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
+$chave_secreta = "sua_chave_secreta_aqui";
+
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
@@ -21,11 +27,13 @@ switch ($method) {
 
     case 'POST':
         $data = json_decode(file_get_contents("php://input"), true);
+
         $nome = $data['nome'] ?? '';
         $email = $data['email'] ?? '';
         $senha = password_hash($data['senha'], PASSWORD_DEFAULT);
         $tipo = $data['tipo'] ?? 'user';
 
+    
         $stmt = $pdo->prepare("INSERT INTO usuarios (nome, email, senha, tipo) VALUES (:nome, :email, :senha, :tipo)");
         $stmt->execute([
             'nome' => $nome,
@@ -34,7 +42,23 @@ switch ($method) {
             'tipo' => $tipo
         ]);
 
-        echo json_encode(["status" => "criado"]);
+        $userId = $pdo->lastInsertId();
+
+        
+        $payload = [
+            'id' => $userId,
+            'nome' => $nome,
+            'email' => $email,
+            'tipo' => $tipo,
+            'iat' => time(),
+            'exp' => time() + (60 * 60 * 24)
+        ];
+
+        $jwt = JWT::encode($payload, $chave_secreta, 'HS256');
+
+        echo json_encode([
+            'token' => $jwt
+        ]);
         break;
 
     case 'DELETE':

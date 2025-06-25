@@ -7,15 +7,15 @@ import {
   Flex,
   Text,
   Select,
+  useToast,
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import CustomLabel from "../../components/CustomLabel/CustomLabel";
 import { CustomInput } from "../../components/CustomInput/CustomInput";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { RegisterFormData } from "../../types/AuthInterface";
-import { register } from "../../service/Auth";
 import { useState } from "react";
-import { useToast } from "@chakra-ui/react";
+import { useAuth } from "../../context/AuthContext";
 
 export function RegisterPage() {
   const {
@@ -23,26 +23,32 @@ export function RegisterPage() {
     handleSubmit,
     formState: { errors, isSubmitted },
   } = useForm<RegisterFormData>();
+
   const toast = useToast();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { register } = useAuth(); 
 
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
     try {
       setLoading(true);
+
       await register(data);
+
       toast({
-        title: "Cadastro realizado",
-        description: "Usuário cadastrado com sucesso!",
+        title: "Cadastro realizado com sucesso!",
+        description: `Bem-vindo!`,
         status: "success",
         duration: 3000,
         isClosable: true,
       });
-      navigate("/"); 
+
+      navigate("/homepage");
     } catch (error: any) {
       toast({
         title: "Erro ao cadastrar",
-        description: error.response?.data?.message || "Erro ao criar o usuário",
+        description:
+          error.response?.data?.message || "Erro ao criar o usuário",
         status: "error",
         duration: 3000,
         isClosable: true,
