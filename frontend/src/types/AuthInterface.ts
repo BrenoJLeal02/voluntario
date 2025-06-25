@@ -5,9 +5,8 @@ export interface LoginFormData {
 }
 
 export interface RegisterFormData {
-  name: string; 
+  nome: string;
   email: string;
-  username: string;
-  password: string;
-  role: "ADMIN" | "USER";
+  senha: string;
+  tipo: 'admin' | 'user';
 }

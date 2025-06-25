@@ -1,12 +1,8 @@
-import axios from 'axios';
-
-const token = localStorage.getItem('jwtToken') || 'no token';
+import axios from 'axios'
 
 export const apiAuth = axios.create({
-
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
   headers: {
-
-    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
   },
-});
+})
