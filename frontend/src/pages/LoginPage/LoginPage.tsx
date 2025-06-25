@@ -14,7 +14,7 @@ import { CustomInput } from "../../components/CustomInput/CustomInput";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { LoginFormData } from "../../types/AuthInterface";
 import { useState } from "react";
-import { login } from "../../service/Auth";
+// import { login } from "../../service/Auth";
 
 export function LoginPage() {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>();

@@ -30,10 +30,10 @@ export function RegisterPage() {
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
     try {
       setLoading(true);
-      const response = await register(data);
+      await register(data);
       toast({
         title: "Cadastro realizado",
-        description: `Bem-vindo, ${response.data.username}`,
+        description: "Usuário cadastrado com sucesso!",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -67,13 +67,13 @@ export function RegisterPage() {
                 <CustomInput
                   type="text"
                   placeholder="Digite seu nome"
-                  {...formRegister("name", {
+                  {...formRegister("nome", {
                     required: "Nome é obrigatório",
                   })}
                 />
-                {isSubmitted && errors.name && (
+                {isSubmitted && errors.nome && (
                   <Text color="red.400" fontSize="sm" mt={1}>
-                    {errors.name.message}
+                    {errors.nome.message}
                   </Text>
                 )}
               </Box>
@@ -95,33 +95,17 @@ export function RegisterPage() {
               </Box>
 
               <Box>
-                <CustomLabel>Nome de Usuário</CustomLabel>
-                <CustomInput
-                  type="text"
-                  placeholder="Digite seu username"
-                  {...formRegister("username", {
-                    required: "Username é obrigatório",
-                  })}
-                />
-                {isSubmitted && errors.username && (
-                  <Text color="red.400" fontSize="sm" mt={1}>
-                    {errors.username.message}
-                  </Text>
-                )}
-              </Box>
-
-              <Box>
                 <CustomLabel>Senha</CustomLabel>
                 <CustomInput
                   type="password"
                   placeholder="Digite sua senha"
-                  {...formRegister("password", {
+                  {...formRegister("senha", {
                     required: "Senha é obrigatória",
                   })}
                 />
-                {isSubmitted && errors.password && (
+                {isSubmitted && errors.senha && (
                   <Text color="red.400" fontSize="sm" mt={1}>
-                    {errors.password.message}
+                    {errors.senha.message}
                   </Text>
                 )}
               </Box>
@@ -136,17 +120,18 @@ export function RegisterPage() {
                     borderColor: "#00875f",
                     boxShadow: "0 0 0 1px #00875f",
                   }}
-                  {...formRegister("role", {
+                  {...formRegister("tipo", {
                     required: "Selecione uma role",
                   })}
-                  defaultValue="USER"
+                  defaultValue="user"
                 >
-                  <option value="ADMIN">Admin</option>
-                  <option value="USER">User</option>
+                  <option value="admin">Admin</option>
+                  <option value="user">User</option>
                 </Select>
-                {isSubmitted && errors.role && (
+
+                {isSubmitted && errors.tipo && (
                   <Text color="red.400" fontSize="sm" mt={1}>
-                    {errors.role.message}
+                    {errors.tipo.message}
                   </Text>
                 )}
               </Box>
