@@ -1,7 +1,6 @@
 export interface LoginFormData {
-  email?: string;
-  username?: string;
-  password: string;
+  email: string;
+  senha: string;
 }
 
 export interface RegisterFormData {
@@ -10,3 +9,6 @@ export interface RegisterFormData {
   senha: string;
   tipo: 'admin' | 'user';
 }
+export interface LoginResponse{
+  token: string;
+} 

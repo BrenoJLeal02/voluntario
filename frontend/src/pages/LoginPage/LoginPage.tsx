@@ -14,43 +14,43 @@ import { CustomInput } from "../../components/CustomInput/CustomInput";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { LoginFormData } from "../../types/AuthInterface";
 import { useState } from "react";
-// import { login } from "../../service/Auth";
+import { useAuth } from "../../context/AuthContext"; 
 
 export function LoginPage() {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
-  try {
-    setLoading(true);
+  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
+    try {
+      setLoading(true);
 
-    const response = await login(data);
-
-      localStorage.setItem("jwtToken", response.token);
+      await login(data); 
 
       toast({
         title: "Login realizado com sucesso",
-        description: `Bem-vindo de volta, ${response.username}`,
+        description: `Bem-vindo`,
         status: "success",
         duration: 3000,
         isClosable: true,
       });
 
-      navigate("/transacao");
+      navigate("/homepage");
 
-  } catch (error: any) {
-    toast({
-      title: "Erro ao fazer login",
-      description: error.response?.data?.message || "Erro ao autenticar o usuário",
-      status: "error",
-      duration: 3000,
-      isClosable: true,
-    });
-    setLoading(false); 
-  }
-};
+    } catch (error: any) {
+      toast({
+        title: "Erro ao fazer login",
+        description: error.response?.data?.message || "Erro ao autenticar o usuário",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Flex minH="100vh" align="center" justify="center">
@@ -81,13 +81,13 @@ const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
               <Box>
                 <CustomLabel>Senha</CustomLabel>
                 <CustomInput
-                  type="password"
+                  type="password" // corrigido!
                   placeholder="Digite sua senha"
-                  {...register("password", { required: "Senha é obrigatória" })}
+                  {...register("senha", { required: "Senha é obrigatória" })}
                 />
-                {errors.password && (
+                {errors.senha && (
                   <Text color="red.400" fontSize="sm" mt={1}>
-                    {errors.password.message}
+                    {errors.senha.message}
                   </Text>
                 )}
               </Box>
